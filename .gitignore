@@ -1,3 +1,5 @@
 Server/API/appsettings.json
 Server/API/appsettings.Development.json
 Server/API/Properties/launchSettings.json
+Client/package.json
+Client/package-lock.json
