@@ -1,17 +1,19 @@
 ﻿using Core.Interfaces;
 using Core.Models;
-using Infastructure.Data;
+using Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers;
 
-public class ProductsController(IProductRepositery _productRepo) : BaseApiController
+public class ProductsController(IGenericRepositery<Product> _repo) : BaseApiController
 {
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts(string? brand, string? type, string? sort)
     {
-        var products = await _productRepo.GetProductsAsync(brand, type, sort);
+
+        var specs = new ProductSpecification(brand, type, sort);
+
+        var products = await _repo.GetListBySpecAsync(specs);
 
         return products.ToList();
     }
@@ -19,7 +21,7 @@ public class ProductsController(IProductRepositery _productRepo) : BaseApiContro
     [HttpGet("{id:int}")]
     public async Task<ActionResult<Product>> GetProduct(int id)
     {
-        var product = await _productRepo.GetProductByIdAsync(id);
+        var product = await _repo.GetByIdAsync(id);
         if (product == null) return NotFound();
         return product;
     }
@@ -27,8 +29,8 @@ public class ProductsController(IProductRepositery _productRepo) : BaseApiContro
     [HttpPost]
     public async Task<ActionResult<Product>> CreateProduct(Product product)
     {
-        _productRepo.AddProduct(product);
-        if (!await _productRepo.SaveChangesAsync()) return BadRequest("Product Cannot be Added");
+        _repo.Add(product);
+        if (!await _repo.SaveAllAsync()) return BadRequest("Product Cannot be Added");
         return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
     }
 
@@ -37,8 +39,8 @@ public class ProductsController(IProductRepositery _productRepo) : BaseApiContro
     public async Task<ActionResult> UpdateProduct(int id, Product product)
     {
         if (product.Id != id || !ProductExist(id)) return BadRequest("Cannot update this product");
-        _productRepo.UpdateProduct(product);
-        if (await _productRepo.SaveChangesAsync()) return NoContent();
+        _repo.Update(product);
+        if (await _repo.SaveAllAsync()) return NoContent();
 
 
         return BadRequest("Product cannot be Updated");
@@ -49,12 +51,12 @@ public class ProductsController(IProductRepositery _productRepo) : BaseApiContro
     [HttpDelete("{id:int}")]
     public async Task<ActionResult> DeleteProduct(int id)
     {
-        var product = await _productRepo.GetProductByIdAsync(id);
+        var product = await _repo.GetByIdAsync(id);
 
         if (product == null) return NotFound();
 
-        _productRepo.DeleteProduct(product);
-        if (await _productRepo.SaveChangesAsync()) return NoContent();
+        _repo.Remove(product);
+        if (await _repo.SaveAllAsync()) return NoContent();
 
         return BadRequest("Product Cannot be deleted");
     }
@@ -62,22 +64,26 @@ public class ProductsController(IProductRepositery _productRepo) : BaseApiContro
     [HttpGet("brands")]
     public async Task<ActionResult<IReadOnlyList<string>>> GetBrands()
     {
-        var products = await _productRepo.GetBrandsAsync();
-        return products.ToList();
+        var specs = new BrandListSpecification();
+
+        return Ok(await _repo.GetListBySpecAsync(specs));
     }
 
     [HttpGet("types")]
     public async Task<ActionResult<IReadOnlyList<string>>> GetTypes()
     {
-        var products = await _productRepo.GetTypesAsync();
-        return products.ToList();
+
+        var specs = new TypeListSpecification();
+
+        return Ok(await _repo.GetListBySpecAsync(specs));
+
     }
 
 
 
     private bool ProductExist(int id)
     {
-        return _productRepo.ProductExists(id);
+        return _repo.Exists(id);
     }
 
 }
