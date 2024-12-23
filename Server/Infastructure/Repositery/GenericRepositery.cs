@@ -17,6 +17,13 @@ public class GenericRepositery<T>(StoreContext _db) : IGenericRepositery<T> wher
         _dbset.Add(entity);
     }
 
+    public async Task<int> CountAsync(ISpecification<T> spec)
+    {
+        var query = _dbset.AsQueryable();
+        query = spec.ApplyCriteria(query);
+        return await query.CountAsync();
+    }
+
     public bool Exists(int id)
     {
         return _dbset.Any(x => x.Id == id);

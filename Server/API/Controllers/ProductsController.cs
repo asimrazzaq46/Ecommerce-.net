@@ -1,5 +1,7 @@
-﻿using Core.Interfaces;
+﻿using API.RequestHelpers;
+using Core.Interfaces;
 using Core.Models;
+using Core.Params;
 using Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,14 +10,15 @@ namespace API.Controllers;
 public class ProductsController(IGenericRepositery<Product> _repo) : BaseApiController
 {
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts(string? brand, string? type, string? sort)
+    public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts([FromQuery]ProductSpecsSearchParams searchParams)
     {
 
-        var specs = new ProductSpecification(brand, type, sort);
+        var specs = new ProductSpecification(searchParams);
 
-        var products = await _repo.GetListBySpecAsync(specs);
+   
 
-        return products.ToList();
+
+        return await CreatePageResult(_repo,specs,searchParams.pageIndex,searchParams.pageSize);
     }
 
     [HttpGet("{id:int}")]

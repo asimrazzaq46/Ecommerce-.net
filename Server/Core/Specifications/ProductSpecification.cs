@@ -1,16 +1,22 @@
 ﻿using Core.Models;
+using Core.Params;
 using System.Linq.Expressions;
 
 namespace Core.Specifications;
 
 public class ProductSpecification : BaseSpecification<Product>
 {
-    public ProductSpecification(string? brand , string? type,string? sort) : base(x=>
-        (string.IsNullOrWhiteSpace(brand)|| x.Brand == brand) &&
-        (string.IsNullOrWhiteSpace(type) || x.Type == type)
+    public ProductSpecification(ProductSpecsSearchParams searchParams) : base(x=>
+        (string.IsNullOrEmpty(searchParams.Search) || x.Name.ToLower().Contains(searchParams.Search)) &&
+        (searchParams.Brands.Count == 0 || searchParams.Brands.Contains(x.Brand)) &&
+        (searchParams.Types.Count == 0 || searchParams.Types.Contains(x.Type))
         )
     {
-        switch (sort)
+
+        ApplyPagging(searchParams.pageSize * (searchParams.pageIndex - 1),searchParams.pageSize);
+
+
+        switch (searchParams.Sort)
         {
             case "priceAsc":
                 AddOrderBy(x => x.Price);
