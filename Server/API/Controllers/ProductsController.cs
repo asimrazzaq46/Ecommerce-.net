@@ -16,8 +16,6 @@ public class ProductsController(IGenericRepositery<Product> _repo) : BaseApiCont
         var specs = new ProductSpecification(searchParams);
 
    
-
-
         return await CreatePageResult(_repo,specs,searchParams.pageIndex,searchParams.pageSize);
     }
 

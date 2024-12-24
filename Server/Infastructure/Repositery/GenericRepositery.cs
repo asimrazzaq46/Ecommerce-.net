@@ -23,7 +23,7 @@ public class GenericRepositery<T>(StoreContext _db) : IGenericRepositery<T> wher
         query = spec.ApplyCriteria(query);
         return await query.CountAsync();
     }
-
+     
     public bool Exists(int id)
     {
         return _dbset.Any(x => x.Id == id);
