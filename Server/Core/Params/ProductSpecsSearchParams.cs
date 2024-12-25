@@ -40,7 +40,4 @@ public class ProductSpecsSearchParams
 		set => _serach = value.ToLower(); 
 	}
 
-
-
-
 }
