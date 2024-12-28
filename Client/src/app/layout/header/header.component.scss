@@ -1,0 +1,26 @@
+.custom-badge .mat-badge-content {
+  width: 24px;
+  height: 24px;
+  font-size: 14px;
+  line-height: 24px;
+}
+
+.custom-badge .mat-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+}
+
+button[mat-stroked-button] {
+  font-weight: bold; /* Makes the text bold */
+}
+
+nav a {
+  border-bottom: 2px solid transparent;
+  transition: all 0.4s;
+}
+
+nav a:hover {
+  border-color: #6366f1;
+  transform: scale(0.9);
+}

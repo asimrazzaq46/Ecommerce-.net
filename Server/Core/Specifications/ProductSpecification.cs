@@ -15,7 +15,6 @@ public class ProductSpecification : BaseSpecification<Product>
 
         ApplyPagging(searchParams.pageSize * (searchParams.pageIndex - 1),searchParams.pageSize);
 
-
         switch (searchParams.Sort)
         {
             case "priceAsc":

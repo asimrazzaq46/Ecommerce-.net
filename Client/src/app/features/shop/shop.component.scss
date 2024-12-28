@@ -1,0 +1,27 @@
+.search-custom-border {
+  border: 2px solid #5ca6d7;
+  transition: 0.1s all;
+  // Ensure border persists on hover
+  &:hover {
+    border: none;
+    border-bottom: 4px solid #7d00fa;
+  }
+
+  // Ensure border persists on focus
+  &:focus {
+    border: none;
+    border-bottom: 4px solid #7d00fa;
+    outline: none; // Optional: Remove the default outline if needed
+  }
+
+  // Ensure border persists on active state
+  &:active {
+    border: none;
+    border-bottom: 4px solid #7d00fa;
+  }
+
+  // For disabled state (optional)
+  &:disabled {
+    border: 2px solid #2c0483;
+  }
+}
