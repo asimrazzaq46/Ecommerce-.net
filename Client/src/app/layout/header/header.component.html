@@ -1,12 +1,24 @@
-<header class="border-b shadow-md p-3 w-full">
+<header class="border-b shadow-md p-3 w-full max-h-20 fixed top-0 z-50 bg-white">
   <div
     class="flex align-middle items-center justify-between max-w-screen-2xl mx-auto"
   >
-    <img src="/images/logo.png" alt="app logo" class="max-h-16" />
-    <nav class="flex gap-3 uppercase font-medium my-2 text-xl custom-nav">
-      <a routerLink="/" class="custom-a" routerLinkActive>Home</a>
-      <a routerLink="" routerLinkActive>Shop</a>
-      <a routerLink="/contact" routerLinkActive>Contact</a>
+    <img
+      routerLink="/"
+      src="/images/logo.png"
+      alt="app logo"
+      class="max-h-16"
+    />
+    <nav class="flex gap-4 uppercase font-medium my-2 text-2xl custom-nav">
+      <a
+        routerLink="/"
+        class="custom-a"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >Home</a
+      >
+      <a routerLink="/shop" routerLinkActive="active">Shop</a>
+      <a routerLink="/contact" routerLinkActive="active">Contact</a>
+      <a routerLink="/test-error" routerLinkActive="active">Test-Errors</a>
     </nav>
     <div class="flex gap-3 align-middle">
       <a
@@ -22,5 +34,6 @@
     </div>
   </div>
 </header>
-
-<router-outlet></router-outlet>
+@if(busyService.loading){
+<mat-progress-bar mode="indeterminate" class="top-20 z-50"></mat-progress-bar>
+}

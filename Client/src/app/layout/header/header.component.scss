@@ -16,11 +16,17 @@ button[mat-stroked-button] {
 }
 
 nav a {
-  border-bottom: 2px solid transparent;
+  border-bottom: 2.5px solid transparent;
   transition: all 0.4s;
 }
 
-nav a:hover {
-  border-color: #6366f1;
-  transform: scale(0.9);
+a {
+  &:hover {
+    // border-color: #6366f1;
+    color: #3d40ec;
+  }
+
+  &.active {
+    color: #3d40ec;
+  }
 }

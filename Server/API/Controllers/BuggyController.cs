@@ -35,6 +35,7 @@ public class BuggyController : BaseApiController
     public IActionResult GetInternalError()
     {
         throw new Exception("This is a test exception");
+        
     }
 
 }

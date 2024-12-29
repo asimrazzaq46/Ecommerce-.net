@@ -3,7 +3,7 @@
 public class ProductSpecsSearchParams
 {
 
-	private const int MaxpageSize = 10;
+	private const int MaxpageSize = 20;
 
 	public int pageIndex { get; set; } = 1;
 

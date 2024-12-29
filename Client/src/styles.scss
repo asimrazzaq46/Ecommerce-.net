@@ -20,17 +20,39 @@ $customTheme: mat.define-theme();
   .mdc-flat-button {
     @apply rounded-md;
   }
+
+  @include mat.badge-overrides(
+    (
+      background-color: rgb(86, 79, 213),
+      text-color: rgb(244, 251, 249),
+    )
+  );
 }
 
 .container {
   @apply mx-auto max-w-screen-xl;
 }
 
-
-.text-primary{
+.text-primary {
   color: #7d00fa;
 }
 
-button.match-input-height{
+button.match-input-height {
   height: var(--mat-form-field-container-height) !important;
+}
+
+.mdc-notched-outline__notch {
+  border-right-style: none !important;
+}
+
+.mat-mdc-snack-bar-container.snack-error {
+  --mdc-snackbar-container-color: red;
+  --mat-snack-bar-button-color: #fff;
+  --mdc-snackbar-supporting-text-color: #fff;
+}
+
+.mat-mdc-snack-bar-container.snack-success {
+  --mdc-snackbar-container-color: green;
+  --mat-snack-bar-button-color: #fff;
+  --mdc-snackbar-supporting-text-color: #fff;
 }
