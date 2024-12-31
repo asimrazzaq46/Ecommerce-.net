@@ -1,4 +1,6 @@
-<header class="border-b shadow-md p-3 w-full max-h-20 fixed top-0 z-50 bg-white">
+<header
+  class="border-b shadow-md p-3 w-full max-h-20 fixed top-0 z-50 bg-white"
+>
   <div
     class="flex align-middle items-center justify-between max-w-screen-2xl mx-auto"
   >
@@ -22,8 +24,8 @@
     </nav>
     <div class="flex gap-3 align-middle">
       <a
-        href=""
-        matBadge="8"
+        routerLink="/cart"
+        [matBadge]="cartService.cart() ? cartService.itemsCount() : ''"
         matBadgeSize="large"
         class="custom-badge mt-2 mr-2"
       >

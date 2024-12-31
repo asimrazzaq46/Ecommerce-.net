@@ -36,7 +36,7 @@ export class ShopComponent implements OnInit {
 
   shopParams = new ShopParams();
 
-  products = signal<Pagination<Product> | undefined>(undefined);
+  products = signal<Pagination<Product> | null>(null);
 
   pageSizeOptions = [5, 10, 15, 20];
 

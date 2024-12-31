@@ -20,21 +20,25 @@
           </p>
         </div>
         <div class="flex gap-4 mt-6">
-            <button mat-flat-button class="match-input-height">
-                <mat-icon>shopping_cart</mat-icon>Add to cart
-            </button>
-             <mat-form-field appearance="outline" class="flex ">
-                <mat-label>Quantity</mat-label>
-                <input matInput type="number" />
-             </mat-form-field>
+          <button
+            [disabled]="quantity == quantityInCart"
+            mat-flat-button
+            class="match-input-height"
+            (click)="updateCart()"
+          >
+            <mat-icon>shopping_cart</mat-icon>{{ getButtontext() }}
+          </button>
+          <mat-form-field appearance="outline" class="flex">
+            <mat-label>Quantity</mat-label>
+            <input matInput type="number" min="0" [(ngModel)]="quantity" />
+          </mat-form-field>
         </div>
 
         <mat-divider></mat-divider>
 
         <p class="mt-6 text-gray-500">
-            {{product()?.description}}
+          {{ product()?.description }}
         </p>
-
       </div>
     </div>
   </div>

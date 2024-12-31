@@ -1,0 +1,19 @@
+<section>
+  <div class="mx-auto max-w-screen-xl">
+    <div class="flex w-full items-start gap-6 mt-32">
+      <div class="w-3/4">
+        @if(!cartService.cart()?.items?.length ){
+
+        <h1 class="text-3xl font-bold text-gray-700 text-center">
+          Cart is Empty
+        </h1>
+        }@else{ @for (item of cartService.cart()?.items; track item.productId) {
+        <app-cart-item [item]="item" />
+        } }
+      </div>
+      <div class="w-1/4">
+        <app-order-summary></app-order-summary>
+      </div>
+    </div>
+  </div>
+</section>
