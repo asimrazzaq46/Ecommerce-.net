@@ -1,6 +1,8 @@
 ﻿using API.DTOs;
 using Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace API.Controllers;
 
@@ -36,6 +38,17 @@ public class BuggyController : BaseApiController
     {
         throw new Exception("This is a test exception");
         
+    }
+
+    [Authorize]
+    [HttpGet("secret")]
+    public IActionResult GetSecret() {
+
+        var name = User.FindFirst(ClaimTypes.Name)?.Value;
+        var id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        return Ok("Hello "+ name + " with the id: "+id);
+    
     }
 
 }

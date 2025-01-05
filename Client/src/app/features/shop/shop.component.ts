@@ -12,6 +12,7 @@ import { ShopParams } from '../../shared/models/shopParams';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { Pagination } from '../../shared/models/pagination.model';
 import { FormsModule } from '@angular/forms';
+import { AccountService } from '../../core/services/account.service';
 
 type Sorting = { name: string; value: string };
 
@@ -37,6 +38,7 @@ export class ShopComponent implements OnInit {
   shopParams = new ShopParams();
 
   products = signal<Pagination<Product> | null>(null);
+  private accountService = inject(AccountService);
 
   pageSizeOptions = [5, 10, 15, 20];
 

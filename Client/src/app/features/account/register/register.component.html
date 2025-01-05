@@ -1,0 +1,51 @@
+<mat-card class="max-w-lg mx-auto mt-32 p-8 bg-white">
+  <form [formGroup]="registerForm" (submit)="onSubmit()">
+    <div class="text-center mb-6">
+      <h1 class="text-3xl font-semibold text-primary">Login</h1>
+    </div>
+
+    <app-text-input
+      label="First Name"
+      type="text"
+      formControlName="firstName"
+    />
+    <app-text-input label="Last Name" type="text" formControlName="lastName" />
+
+    <app-text-input
+      type="email"
+      formControlName="email"
+      label="Email Address"
+    />
+
+    <app-text-input
+      type="password"
+      formControlName="password"
+      label="Password"
+    />
+
+    <app-text-input
+      type="password"
+      formControlName="confirmPassword"
+      label="Confirm Password"
+    />
+
+    @if(validationErrors){
+    <div class="mb-3 p-4 bg-red-100 text-red-600">
+      <ul class="list-disc px-3">
+        @for (err of validationErrors; track $index) {
+        <li>{{ err }}</li>
+        }
+      </ul>
+    </div>
+    }
+
+    <button
+      [disabled]="registerForm.invalid"
+      mat-flat-button
+      type="submit"
+      class="w-full py-2"
+    >
+      Register
+    </button>
+  </form>
+</mat-card>

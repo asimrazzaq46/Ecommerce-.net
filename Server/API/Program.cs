@@ -1,9 +1,10 @@
-using API.Middlewares;
+ using API.Middlewares;
 using Core.Interfaces;
 using Core.Models;
 using Infastructure.Data;
 using Infastructure.Repositery;
 using Infastructure.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
 
@@ -15,6 +16,18 @@ builder.Services.AddControllers();
 
 builder.Services.AddDbContext<StoreContext>(opt=>
 opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddAuthorization();
+
+builder.Services.AddIdentityApiEndpoints<AppUser>(opt =>
+{
+	//opt.Password.RequireDigit = false;
+	//opt.Password.RequireLowercase = false;
+	//opt.Password.RequireUppercase = false;
+	//opt.Password.RequireNonAlphanumeric = false;
+
+
+}).AddEntityFrameworkStores<StoreContext>();
 
 builder.Services.AddScoped<IProductRepositery,ProductRepositery>();
 builder.Services.AddScoped(typeof(IGenericRepositery<>),typeof(GenericRepositery<>));
@@ -38,6 +51,7 @@ builder.Services.AddCors(policy =>
 	{
 		opt.AllowAnyHeader()
 		.AllowAnyMethod()
+		.AllowCredentials()
 		.WithOrigins("http://localhost:4200", "https://localhost:4200");
 	});
 }
@@ -52,7 +66,8 @@ app.UseCors("cors-policy");
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.UseAuthorization();
+app.MapGroup("api").MapIdentityApi<AppUser>();
 
 
 try
@@ -71,8 +86,6 @@ catch (Exception ex)
 
 	throw;
 }
-
-
 
 
 

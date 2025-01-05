@@ -28,11 +28,19 @@
         class="flex items-center justify-between gap-4 border-t border-gray-200 pt-2"
       >
         <dt class="font-medium text-gray-500">Total</dt>
-        <dd class="font-medium text-gray-900">{{cartService.total()?.total | currency}}</dd>
+        <dd class="font-medium text-gray-900">
+          {{ cartService.total()?.total | currency }}
+        </dd>
       </dl>
     </div>
     <div class="flex flex-col gap-2">
-      <button routerLink="/checkout" mat-flat-button>CheckOut</button>
+      <button
+        routerLink="/checkout"
+        mat-flat-button
+        [disabled]="cartService.cart() == null"
+      >
+        CheckOut
+      </button>
       <button routerLink="/shop" mat-button>Continue Shopping</button>
     </div>
   </div>

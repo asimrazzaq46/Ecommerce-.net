@@ -1,0 +1,27 @@
+<mat-form-field appearance="outline" class="w-full mb-4">
+  <mat-label>{{ label }}</mat-label>
+  <input
+    [type]="type"
+    [formControl]="control"
+    placeholder="{{ label }}"
+    (blur)="control.markAsTouched()"
+    matInput
+  />
+  @if(control.hasError("required")){
+  <mat-error>{{ label }} is required</mat-error>
+  } @if(control.hasError("email")){
+  <mat-error>Email is invalid</mat-error>
+  } @if(control.hasError("minLength")){
+  <mat-error
+    >Minimum {{ control.errors?.["minLength"].requiredLength }} Charecters are
+    required</mat-error
+  >
+  } @if(control.hasError("maxLength")){
+  <mat-error
+    >Minimum {{ control.errors?.["maxLength"].requiredLength }} Charecters are
+    required</mat-error
+  >
+  } @if(control.hasError("isMatching")){
+  <mat-error>Password not matched</mat-error>
+  }
+</mat-form-field>
