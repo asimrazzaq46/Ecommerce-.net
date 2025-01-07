@@ -29,5 +29,25 @@ public class SeedStoreContext()
             await _db.SaveChangesAsync();
 
         }
+
+        if (!_db.DeliveryMethods.Any()) {
+
+            string path = "../Infastructure/Data/SeedData/delivery.json";
+
+            if (!File.Exists(path)) {
+                throw new FileNotFoundException($"Seed Data file not found at path: {path}");
+            }
+
+            var deliveryData = await File.ReadAllTextAsync(path);
+
+            var deliveries = JsonSerializer.Deserialize<List<DeliveryMethod>>(deliveryData);
+
+            if (deliveries is null) return;
+
+            await _db.DeliveryMethods.AddRangeAsync(deliveries);
+
+            await _db.SaveChangesAsync();
+        
+        }
     }
 }

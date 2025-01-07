@@ -20,7 +20,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   private fb = inject(FormBuilder);
   private accountService = inject(AccountService);
   private activatedROute = inject(ActivatedRoute);
@@ -33,13 +33,9 @@ export class LoginComponent implements OnInit {
 
   private router = inject(Router);
   loginForm = this.fb.group({
-    email: ['johdoe@test.com', Validators.required],
+    email: ['bob@test.com', Validators.required],
     password: ['Pa$$w0rd', Validators.required],
   });
-
-  ngOnInit(): void {
-    // this.loginForm();
-  }
 
   onSubmit() {
     this.accountService.login(this.loginForm.value).subscribe({
