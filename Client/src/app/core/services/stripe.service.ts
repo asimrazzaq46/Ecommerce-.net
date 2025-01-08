@@ -1,11 +1,14 @@
 import { inject, Injectable } from '@angular/core';
 import {
+  ConfirmationToken,
   loadStripe,
   Stripe,
   StripeAddressElement,
   StripeAddressElementOptions,
+  StripeCardElement,
   StripeElement,
   StripeElements,
+  StripePaymentElement,
 } from '@stripe/stripe-js';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
@@ -22,6 +25,7 @@ export class StripeService {
   private stripeKey = environment.stripePublicKey;
   private elements?: StripeElements;
   private addressElement?: StripeAddressElement;
+  private paymentElement?: StripePaymentElement;
 
   private http = inject(HttpClient);
   private cartService = inject(CartService);
@@ -89,6 +93,55 @@ export class StripeService {
     return this.addressElement;
   }
 
+  async createStripePaymentElement() {
+    if (!this.paymentElement) {
+      const elements = await this.initializeElements();
+      if (elements) {
+        this.paymentElement = elements.create('payment');
+      } else throw new Error('Element instance has not been loaded');
+    }
+    return this.paymentElement;
+  }
+
+  // after we completed every step now we have to create a confirmation Payment token
+  async createConfirmationToken() {
+    const stripe = await this.getStripeInstance();
+    const elements = await this.initializeElements();
+    const result = await elements.submit();
+
+    if (result.error) {
+      throw new Error(result.error.message);
+    }
+
+    if (stripe) {
+      return await stripe.createConfirmationToken({ elements });
+    } else {
+      throw new Error('stripe not available');
+    }
+  }
+
+  async confirmPayment(confirmationToken: ConfirmationToken) {
+    const stripe = await this.getStripeInstance();
+    const elements = await this.initializeElements();
+    const result = await elements.submit();
+
+    if (result.error) {
+      throw new Error(result.error.message);
+    }
+
+    const clientSecret = this.cartService.cart()?.clientSecret;
+
+    if (stripe && clientSecret) {
+      return await stripe.confirmPayment({
+        clientSecret,
+        confirmParams: { confirmation_token: confirmationToken.id },
+        redirect: 'if_required',
+      });
+    } else {
+      throw new Error('unable to load stripe');
+    }
+  }
+
   createOrUpdatePaymentIntent() {
     const cart = this.cartService.cart();
 
@@ -104,5 +157,6 @@ export class StripeService {
   disposeElements() {
     this.elements = undefined;
     this.addressElement = undefined;
+    this.paymentElement = undefined;
   }
 }

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, output } from '@angular/core';
 import { MatRadioModule } from '@angular/material/radio';
 
 import { CheckoutService } from '../../../core/services/checkout.service';
@@ -16,6 +16,8 @@ export class CheckoutDeliveryComponent implements OnInit {
   checkoutService = inject(CheckoutService);
   cartService = inject(CartService);
 
+  checkoutDeliveryComplete = output<boolean>();
+
   ngOnInit(): void {
     this.checkoutService.getDeliveryMethods().subscribe({
       next: (methods) => {
@@ -25,6 +27,7 @@ export class CheckoutDeliveryComponent implements OnInit {
           );
           if (method) {
             this.cartService.selectedDelivery.set(method);
+            this.checkoutDeliveryComplete.emit(true);
           }
         }
       },
@@ -37,6 +40,7 @@ export class CheckoutDeliveryComponent implements OnInit {
     if (cart) {
       cart.deliverMethodId = method.id;
       this.cartService.setCart(cart);
+      this.checkoutDeliveryComplete.emit(true);
     }
   }
 }
