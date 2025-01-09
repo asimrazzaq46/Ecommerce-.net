@@ -7,8 +7,7 @@ namespace Infastructure.Services;
 
 public class PaymentService(IConfiguration _config,
     ICartService _cartService,
-    IGenericRepositery<Core.Models.Product> _productRepo,
-    IGenericRepositery<DeliveryMethod> _dmRepo) : IPaymentService
+    IUnitOfWork _unitOfWork) : IPaymentService
 {
     public async Task<ShoppingCart?> CreateirUpdatePaymentIntent(string cartId)
     {
@@ -26,7 +25,7 @@ public class PaymentService(IConfiguration _config,
 
         if (cart.DeliverMethodId.HasValue)
         {
-            var deliveryMethod = await _dmRepo.GetByIdAsync(cart.DeliverMethodId.Value);
+            var deliveryMethod = await _unitOfWork.Repositery<DeliveryMethod>().GetByIdAsync(cart.DeliverMethodId.Value);
 
             if (deliveryMethod == null) return null;
 
@@ -41,7 +40,7 @@ public class PaymentService(IConfiguration _config,
 
             //get the product from database to compare with the item inside the cart e.g price.
 
-            var productItem = await _productRepo.GetByIdAsync(item.ProductId);
+            var productItem = await _unitOfWork.Repositery<Core.Models.Product>().GetByIdAsync(item.ProductId);
 
             if (productItem == null) return null;
 

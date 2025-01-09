@@ -7,7 +7,7 @@ public class BaseSpecification<T>(Expression<Func<T, bool>>? _criteria) : ISpeci
 {
     protected BaseSpecification() : this(null) { }
 
-    public Expression<Func<T, bool>>? Criteria => _criteria; // _criteria ==>  x => x.Brand == Brand which we pass as a ctor
+    public Expression<Func<T, bool>>? Criteria => _criteria; // _criteria ==>  x => x.Brand == Brand which we pass in a constructor
 
     public Expression<Func<T, object>>? Orderby { get; private set; }
 
@@ -21,6 +21,10 @@ public class BaseSpecification<T>(Expression<Func<T, bool>>? _criteria) : ISpeci
 
     public bool IsPagingEnable { get; private set; }
 
+    public List<Expression<Func<T, object>>> Includes { get; } = [];
+
+    public List<string> ThenIncludeStrings { get; } = [];
+
     public IQueryable<T> ApplyCriteria(IQueryable<T> query)
     {
       if(Criteria != null)
@@ -28,6 +32,17 @@ public class BaseSpecification<T>(Expression<Func<T, bool>>? _criteria) : ISpeci
             query = query.Where(Criteria);  
         }
       return query;
+    }
+
+
+    protected void AddInclude(Expression<Func<T, object>> includeExpression)
+    {
+        Includes.Add(includeExpression);
+    }
+
+    protected void AddInclude(string includeStringExpression) //for thenInclude method
+    {
+        ThenIncludeStrings.Add(includeStringExpression);
     }
 
     protected void AddOrderBy(Expression<Func<T, object>> orderByExpression)

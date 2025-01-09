@@ -1,5 +1,6 @@
 ﻿using Core.Interfaces;
 using Core.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infastructure.SpecificationEval;
 
@@ -11,6 +12,16 @@ public class SpecificationEvaluator<T> where T : BaseModel
         {
             query = query.Where(spec.Criteria);  // spec.Criteria = x => x.Brand == Brand
         }
+
+        //if (spec.Includes != null)
+        //{
+
+        //    foreach (var prop in spec.Includes)
+        //    {
+        //        query.Include(prop);
+        //    }
+
+        //}
 
         if (spec.Orderby != null) { 
         
@@ -33,6 +44,10 @@ public class SpecificationEvaluator<T> where T : BaseModel
         query = query.Skip(spec.Skip).Take(spec.Take);
 
         }
+
+        query = spec.Includes.Aggregate(query, (current, include) => current.Include(include));
+
+        query = spec.ThenIncludeStrings.Aggregate(query, (current, include) => current.Include(include)); // then include
 
         return query;   
     }

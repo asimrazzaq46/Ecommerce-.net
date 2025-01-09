@@ -8,6 +8,8 @@ public interface ISpecification<T>
     Expression<Func<T, bool>>? Criteria { get; }
     Expression<Func<T, object>>? Orderby { get; }
     Expression<Func<T, object>>? OrderbyDescending { get; }
+    List<Expression<Func<T, object>>> Includes { get; }
+    List<string> ThenIncludeStrings { get; }  // for thenInclude
 
     bool IsDistinct { get; }
 

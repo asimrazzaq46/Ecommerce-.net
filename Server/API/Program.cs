@@ -32,6 +32,7 @@ builder.Services.AddIdentityApiEndpoints<AppUser>(opt =>
 builder.Services.AddScoped<IProductRepositery,ProductRepositery>();
 builder.Services.AddScoped(typeof(IGenericRepositery<>),typeof(GenericRepositery<>));
 builder.Services.AddScoped<IPaymentService,PaymentService>();
+builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(config =>

@@ -3,7 +3,6 @@ import { inject } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 import { SnackBarService } from '../services/snack-bar.service';
-import { state } from '@angular/animations';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);

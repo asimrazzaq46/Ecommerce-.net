@@ -69,10 +69,7 @@ public class GenericRepositery<T>(StoreContext _db) : IGenericRepositery<T> wher
         _dbset.Remove(entity);
     }
 
-    public async Task<bool> SaveAllAsync()
-    {
-        return await _db.SaveChangesAsync() > 0;
-    }
+  
 
     public void Update(T entity)
     {
