@@ -20,7 +20,7 @@ public class OrdersController(IUnitOfWork _unit, ICartService _cartService) : Ba
         var cart = await _cartService.GetCartAsync(orderDto.CartId);
 
         if (cart == null) return BadRequest("Cart not found");
-
+         
         if (cart.PaymentIntentId == null) return BadRequest("no payment intent for this order");
 
         var items = new List<OrderItem>();

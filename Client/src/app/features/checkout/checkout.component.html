@@ -3,7 +3,7 @@
     <mat-stepper
       [linear]="true"
       (selectionChange)="onStepChange($event)"
-      class="bg-white border border-gray-200 shadow-sm"
+      class="bg-white border border-gray-200 "
       #stepper
     >
       <mat-step [completed]="completionStatus().address" label="Address">
@@ -67,13 +67,12 @@
           <button
             matStepperNext
             mat-flat-button
-            [disabled]="!confirmationToken || loading "
+            [disabled]="!confirmationToken || loading"
             (click)="confirmPayment(stepper)"
           >
             @if(loading){
             <mat-spinner diameter="20"></mat-spinner>
             } @else{
-
             <span>
               Pay
               {{ cartService.total()?.total | currency }}

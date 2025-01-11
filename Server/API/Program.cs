@@ -1,4 +1,5 @@
  using API.Middlewares;
+using API.SignalR;
 using Core.Interfaces;
 using Core.Models;
 using Infastructure.Data;
@@ -34,6 +35,8 @@ builder.Services.AddScoped(typeof(IGenericRepositery<>),typeof(GenericRepositery
 builder.Services.AddScoped<IPaymentService,PaymentService>();
 builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 
+builder.Services.AddSignalR();
+
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(config =>
 {
@@ -65,11 +68,16 @@ var app = builder.Build();
 
 app.UseMiddleware<ErrorHandling>();
 app.UseCors("cors-policy");
+app.UseAuthentication();
 app.UseAuthorization();
 
+
+
 app.MapControllers();
-app.UseAuthorization();
+
+
 app.MapGroup("api").MapIdentityApi<AppUser>();
+app.MapHub<NotificationHub>("/hub/notifications");
 
 
 try
