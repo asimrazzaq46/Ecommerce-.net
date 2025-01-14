@@ -20,20 +20,15 @@ opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddIdentityApiEndpoints<AppUser>(opt =>
-{
-	//opt.Password.RequireDigit = false;
-	//opt.Password.RequireLowercase = false;
-	//opt.Password.RequireUppercase = false;
-	//opt.Password.RequireNonAlphanumeric = false;
-
-
-}).AddEntityFrameworkStores<StoreContext>();
+builder.Services.AddIdentityApiEndpoints<AppUser>()
+.AddRoles<IdentityRole>()
+.AddEntityFrameworkStores<StoreContext>();
 
 builder.Services.AddScoped<IProductRepositery,ProductRepositery>();
 builder.Services.AddScoped(typeof(IGenericRepositery<>),typeof(GenericRepositery<>));
 builder.Services.AddScoped<IPaymentService,PaymentService>();
 builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
+builder.Services.AddScoped<ICouponService,CouponService>();
 
 builder.Services.AddSignalR();
 
@@ -86,8 +81,9 @@ try
 	var services = scope.ServiceProvider;
 	var context = services.GetRequiredService<StoreContext>();
 	await context.Database.MigrateAsync();
+	var user = services.GetRequiredService<UserManager<AppUser>>();
 
-	await SeedStoreContext.SeedAsync(context);
+	await SeedStoreContext.SeedAsync(context,user);
 
 }
 catch (Exception ex)

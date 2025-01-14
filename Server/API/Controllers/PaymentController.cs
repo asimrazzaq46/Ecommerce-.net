@@ -51,7 +51,7 @@ public class PaymentController(IPaymentService _paymentService,
             {
                 return BadRequest("Invalid event data");
             }
-          
+
             await HandlePaymentIntentSucceed(intent);
 
             return Ok();
@@ -75,13 +75,15 @@ public class PaymentController(IPaymentService _paymentService,
     {
         if (intent.Status == "succeeded")
         {
-            Console.WriteLine("intent is : ",intent);
+            Console.WriteLine("intent is : ", intent);
             var spec = new OrderSpecification(intent.Id, true);
 
             var order = await _unitOfWork.Repositery<Order>().GetEntityBySpecAsync(spec)
                 ?? throw new Exception("Order not found");
 
-            if ((long)order.GetTotal() * 100 != intent.Amount)
+            var orderTotal = (long)Math.Round(order.GetTotal() * 100, MidpointRounding.AwayFromZero);
+
+            if (orderTotal != intent.Amount)
             {
                 order.OrderStatus = OrderStatus.PaymentMismatch;
             }
@@ -96,9 +98,9 @@ public class PaymentController(IPaymentService _paymentService,
 
             var connectionId = NotificationHub.GetConnectionIdByEmail(order.BuyerEmail);
 
-            if(!string.IsNullOrEmpty(connectionId))
+            if (!string.IsNullOrEmpty(connectionId))
             {
-                await _hubContext.Clients.Client(connectionId).SendAsync("OrderCOmpleteNotification",order.ToDto());
+                await _hubContext.Clients.Client(connectionId).SendAsync("OrderCOmpleteNotification", order.ToDto());
             }
 
         }

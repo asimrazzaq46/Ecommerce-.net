@@ -1,13 +1,28 @@
 ﻿
 
 using Core.Models;
+using Microsoft.AspNetCore.Identity;
 using System.Text.Json;
 
 namespace Infastructure.Data;
 public class SeedStoreContext()
 {
-    public static async Task SeedAsync(StoreContext _db)
+    public static async Task SeedAsync(StoreContext _db,UserManager<AppUser> _userManager)
     {
+
+        if(!_userManager.Users.Any(user=>user.UserName == "admin@test.com"))
+        {
+            var user = new AppUser
+            {
+                UserName ="admin@test.com",
+                Email = "admin@test.com",
+
+            }; ;
+          await  _userManager.CreateAsync(user,"Pa$$w0rd");
+
+            await _userManager.AddToRoleAsync(user,"Admin");
+        }
+
         if (!_db.Products.Any())
         {
            

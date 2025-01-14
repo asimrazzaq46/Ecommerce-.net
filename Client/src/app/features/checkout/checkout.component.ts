@@ -232,6 +232,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         last4: +card.last4,
       },
       shippingAddress,
+      discount: this.cartService.total()?.discount,
     };
   }
 

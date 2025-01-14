@@ -37,11 +37,11 @@ export class StripeService {
     this.stripePromise = loadStripe(this.stripeKey);
   }
 
-  getStripeInstance(): Promise<Stripe | null> {
+  private getStripeInstance(): Promise<Stripe | null> {
     return this.stripePromise;
   }
 
-  async initializeElements() {
+  private async initializeElements() {
     if (!this.elements) {
       const stripe = await this.getStripeInstance();
       if (stripe) {
@@ -146,9 +146,14 @@ export class StripeService {
     const cart = this.cartService.cart();
 
     if (!cart) throw new Error('Problem with cart');
+    const hasClient = !!cart.clientSecret;
+
     return this.http.post<Cart>(this.baseUrl + '/payment/' + cart.id, {}).pipe(
       map((cart) => {
-        this.cartService.setCart(cart);
+        if (!hasClient) {
+          this.cartService.setCart(cart);
+          return cart;
+        }
         return cart;
       })
     );

@@ -6,7 +6,9 @@
       {{ confirmationToken()?.shipping | address }}
     </dd>
     <dt class="font-medium">Payment details</dt>
-    <dd class="mt-1 text-gray-500">{{confirmationToken()?.payment_method_preview | paymentPreview}}</dd>
+    <dd class="mt-1 text-gray-500">
+      {{ confirmationToken()?.payment_method_preview | paymentPreview }}
+    </dd>
   </dl>
 </div>
 

@@ -38,7 +38,6 @@ export class ShopComponent implements OnInit {
   shopParams = new ShopParams();
 
   products = signal<Pagination<Product> | null>(null);
-  private accountService = inject(AccountService);
 
   pageSizeOptions = [5, 10, 15, 20];
 

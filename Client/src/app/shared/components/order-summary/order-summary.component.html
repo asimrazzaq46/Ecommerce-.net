@@ -49,15 +49,40 @@
   <section
     class="space-y-4 rounded-lg border border-gray-200 bg-white shadow-sm"
   >
-    <form class="space-y-2 flex flex-col p-2">
+    <form
+      #form="ngForm"
+      class="space-y-2 flex flex-col p-2"
+      (ngSubmit)="applyCouponCode()"
+    >
       <label class="mb-2 block text-sm font-medium">
         Do you have a voucher code?
       </label>
+
+      <div
+        *ngIf="cartService.cart()?.coupon as coupon"
+        class="flex justify-between items-center mt-8"
+      >
+        <span class="text-sm font-semibold text-gray-800"
+          >{{ coupon.name }} Applied</span
+        >
+
+        <button mat-icon-button (click)="removeCouponCode()">
+          <mat-icon class="text-red-900">delete</mat-icon>
+        </button>
+      </div>
+
       <mat-form-field appearance="outline">
         <mat-label>Voucher code</mat-label>
-        <input type="text" matInput />
+
+        <input
+          type="text"
+          name="coupon"
+          [disabled]="!!cartService.cart()?.coupon"
+          matInput
+          [(ngModel)]="code"
+        />
       </mat-form-field>
-      <button mat-flat-button>Apply Code</button>
+      <button mat-flat-button type="submit">Apply Code</button>
     </form>
   </section>
 </div>
